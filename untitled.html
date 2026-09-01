@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYBER // SYSTEM</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --green:#00ff66;
+    --green-dark:#00a844;
+    --black:#020403;
+    --panel:#06100a;
+    --line:rgba(0,255,102,.25);
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:var(--black);
+    color:var(--green);
+    font-family:"Courier New",Consolas,monospace;
+    overflow-x:hidden;
+}
+
+#matrix{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-5;
+    opacity:.13;
+}
+
+.scanlines{
+    position:fixed;
+    inset:0;
+    z-index:20;
+    pointer-events:none;
+
+    background:
+    repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(0,255,102,.025) 4px
+    );
+}
+
+/* =====================
+   NAVBAR
+===================== */
+
+nav{
+    position:sticky;
+    top:0;
+    z-index:10;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:16px 6%;
+
+    background:rgba(2,4,3,.9);
+
+    border-bottom:1px solid var(--line);
+
+    backdrop-filter:blur(10px);
+}
+
+.logo{
+    font-size:20px;
+    font-weight:bold;
+
+    text-shadow:
+        0 0 8px var(--green),
+        0 0 20px var(--green);
+}
+
+nav span{
+    font-size:11px;
+    opacity:.7;
+}
+
+/* =====================
+   HERO
+===================== */
+
+.hero{
+    min-height:90vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:40px 20px;
+}
+
+.hero-content{
+    max-width:850px;
+}
+
+.badge{
+    display:inline-block;
+
+    border:1px solid var(--line);
+
+    padding:7px 14px;
+
+    font-size:11px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+        0 0 15px rgba(0,255,102,.08);
+}
+
+.hero h1{
+    font-size:clamp(45px,10vw,100px);
+
+    line-height:.9;
+
+    letter-spacing:8px;
+
+    text-shadow:
+        0 0 10px var(--green),
+        0 0 30px var(--green),
+        0 0 70px var(--green);
+}
+
+.hero h2{
+    margin-top:18px;
+
+    font-size:clamp(14px,3vw,24px);
+
+    opacity:.7;
+}
+
+.hero p{
+    margin:25px auto;
+
+    max-width:650px;
+
+    line-height:1.8;
+
+    opacity:.55;
+}
+
+/* =====================
+   BUTTON
+===================== */
+
+.cyber-button{
+    display:inline-block;
+
+    padding:13px 22px;
+
+    margin:6px;
+
+    color:var(--green);
+
+    text-decoration:none;
+
+    border:1px solid var(--green);
+
+    background:rgba(0,255,102,.03);
+
+    font-family:inherit;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.cyber-button:hover{
+    background:var(--green);
+
+    color:#000;
+
+    box-shadow:
+        0 0 15px var(--green),
+        0 0 40px rgba(0,255,102,.5);
+}
+
+/* =====================
+   SECTIONS
+===================== */
+
+section.content{
+    width:min(1100px,90%);
+
+    margin:auto;
+
+    padding:70px 0;
+}
+
+.section-title{
+    font-size:14px;
+
+    margin-bottom:25px;
+
+    border-left:3px solid var(--green);
+
+    padding-left:12px;
+
+    text-shadow:0 0 8px var(--green);
+}
+
+/* =====================
+   GRID
+===================== */
+
+.grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:14px;
+}
+
+.card{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(0,255,102,.06),
+            rgba(0,0,0,.8)
+        );
+
+    border:1px solid var(--line);
+
+    padding:22px;
+
+    min-height:160px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    transition:.25s;
+}
+
+.card::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-100%;
+
+    width:100%;
+    height:1px;
+
+    background:var(--green);
+
+    box-shadow:0 0 10px var(--green);
+
+    transition:.4s;
+}
+
+.card:hover::before{
+    left:100%;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+
+    border-color:var(--green);
+
+    box-shadow:
+        0 0 25px
+        rgba(0,255,102,.1);
+}
+
+.card-number{
+    font-size:28px;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+
+    text-shadow:0 0 10px var(--green);
+}
+
+.card-title{
+    font-size:12px;
+
+    margin-bottom:12px;
+}
+
+.card p{
+    font-size:11px;
+
+    line-height:1.7;
+
+    opacity:.5;
+}
+
+/* =====================
+   SYSTEM PANEL
+===================== */
+
+.system{
+    border:1px solid var(--line);
+
+    padding:22px;
+
+    background:rgba(0,15,7,.8);
+}
+
+.system-row{
+    margin:16px 0;
+}
+
+.system-label{
+    display:flex;
+
+    justify-content:space-between;
+
+    font-size:11px;
+
+    margin-bottom:6px;
+}
+
+.progress{
+    height:5px;
+
+    background:#092015;
+}
+
+.progress div{
+    height:100%;
+
+    background:var(--green);
+
+    box-shadow:0 0 10px var(--green);
+
+    animation:load 2s ease;
+}
+
+@keyframes load{
+    from{
+        width:0;
+    }
+}
+
+/* =====================
+   TERMINAL
+===================== */
+
+.terminal{
+    background:#010201;
+
+    border:1px solid var(--line);
+
+    padding:20px;
+
+    min-height:240px;
+
+    box-shadow:
+        inset 0 0 40px
+        rgba(0,255,102,.03);
+}
+
+.terminal-line{
+    font-size:12px;
+
+    line-height:2;
+
+    opacity:.75;
+}
+
+.prompt{
+    color:var(--green);
+}
+
+.cursor{
+    display:inline-block;
+
+    width:7px;
+    height:14px;
+
+    background:var(--green);
+
+    vertical-align:middle;
+
+    animation:blink 1s infinite;
+}
+
+@keyframes blink{
+    50%{
+        opacity:0;
+    }
+}
+
+/* =====================
+   BUG NO WA
+===================== */
+
+.bug-panel{
+    border:1px solid var(--line);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(0,255,102,.05),
+            rgba(0,0,0,.85)
+        );
+
+    padding:25px;
+
+    box-shadow:
+        0 0 30px
+        rgba(0,255,102,.05);
+}
+
+.bug-header{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:20px;
+}
+
+.bug-title{
+    font-size:18px;
+
+    font-weight:bold;
+
+    text-shadow:
+        0 0 10px var(--green);
+}
+
+.simulation{
+    font-size:9px;
+
+    border:1px solid var(--line);
+
+    padding:5px 8px;
+
+    opacity:.7;
+}
+
+.bug-input{
+    width:100%;
+
+    background:#010401;
+
+    border:1px solid var(--line);
+
+    outline:none;
+
+    padding:14px;
+
+    color:var(--green);
+
+    font-family:inherit;
+
+    font-size:14px;
+
+    margin-bottom:12px;
+}
+
+.bug-input:focus{
+    border-color:var(--green);
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,102,.12);
+}
+
+.bug-status{
+    min-height:80px;
+
+    margin-top:18px;
+
+    border:1px dashed var(--line);
+
+    padding:15px;
+
+    font-size:11px;
+
+    line-height:1.8;
+
+    background:#010401;
+}
+
+.success-text{
+    color:#00ff66;
+
+    text-shadow:
+        0 0 8px #00ff66;
+}
+
+.error-text{
+    color:#ff5555;
+}
+
+.warning-text{
+    color:#dfff00;
+}
+
+/* =====================
+   WARNING
+===================== */
+
+.warning{
+    border:1px solid rgba(0,255,102,.25);
+
+    padding:20px;
+
+    text-align:center;
+
+    margin-top:20px;
+
+    font-size:11px;
+
+    opacity:.65;
+}
+
+/* =====================
+   FOOTER
+===================== */
+
+footer{
+    border-top:1px solid var(--line);
+
+    padding:30px;
+
+    text-align:center;
+
+    font-size:10px;
+
+    opacity:.35;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+
+@media(max-width:800px){
+
+    .grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    nav{
+        padding:14px 4%;
+    }
+}
+
+@media(max-width:500px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero h1{
+        letter-spacing:4px;
+    }
+
+    section.content{
+        width:92%;
+    }
+
+    .bug-header{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="scanlines"></div>
+
+
+<!-- NAVBAR -->
+
+<nav>
+
+    <div class="logo">
+        CYBER//CORE
+    </div>
+
+    <span id="onlineStatus">
+        SYSTEM ONLINE ●
+    </span>
+
+</nav>
+
+
+<!-- HERO -->
+
+<header class="hero">
+
+    <div class="hero-content">
+
+        <div class="badge">
+            [ SECURE DIGITAL ENVIRONMENT ]
+        </div>
+
+        <h1>
+            CYBER
+        </h1>
+
+        <h2>
+            ENTER THE DIGITAL GRID
+        </h2>
+
+        <p>
+            Selamat datang di lingkungan digital
+            bertema cyber. Eksplorasi sistem,
+            teknologi, jaringan, dan dunia digital
+            dalam satu interface futuristik.
+        </p>
+
+        <a
+            href="#system"
+            class="cyber-button"
+        >
+            ENTER SYSTEM
+        </a>
+
+        <a
+            href="#terminal"
+            class="cyber-button"
+        >
+            OPEN TERMINAL
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- SYSTEM -->
+
+<section
+    class="content"
+    id="system"
+>
+
+    <div class="section-title">
+        // SYSTEM STATUS
+    </div>
+
+    <div class="grid">
+
+        <div class="card">
+
+            <div class="card-number">
+                01
+            </div>
+
+            <div class="card-title">
+                NETWORK
+            </div>
+
+            <p>
+                Network interface operational.
+                Connection status stable.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-number">
+                02
+            </div>
+
+            <div class="card-title">
+                SECURITY
+            </div>
+
+            <p>
+                Security monitoring active.
+                System integrity verified.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-number">
+                03
+            </div>
+
+            <div class="card-title">
+                DATABASE
+            </div>
+
+            <p>
+                Virtual database initialized.
+                All systems responding.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-number">
+                04
+            </div>
+
+            <div class="card-title">
+                CORE
+            </div>
+
+            <p>
+                Cyber core running normally.
+                Processing systems operational.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-number">
+                05
+            </div>
+
+            <div class="card-title">
+                AI MODULE
+            </div>
+
+            <p>
+                Artificial intelligence module
+                connected to local interface.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-number">
+                06
+            </div>
+
+            <div class="card-title">
+                DIGITAL GRID
+            </div>
+
+            <p>
+                Digital grid synchronized.
+                Environment ready.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PERFORMANCE -->
+
+<section class="content">
+
+    <div class="section-title">
+        // SYSTEM PERFORMANCE
+    </div>
+
+    <div class="system">
+
+        <div class="system-row">
+
+            <div class="system-label">
+                <span>CPU</span>
+                <span>78%</span>
+            </div>
+
+            <div class="progress">
+                <div style="width:78%"></div>
+            </div>
+
+        </div>
+
+
+        <div class="system-row">
+
+            <div class="system-label">
+                <span>MEMORY</span>
+                <span>64%</span>
+            </div>
+
+            <div class="progress">
+                <div style="width:64%"></div>
+            </div>
+
+        </div>
+
+
+        <div class="system-row">
+
+            <div class="system-label">
+                <span>NETWORK</span>
+                <span>91%</span>
+            </div>
+
+            <div class="progress">
+                <div style="width:91%"></div>
+            </div>
+
+        </div>
+
+
+        <div class="system-row">
+
+            <div class="system-label">
+                <span>SECURITY</span>
+                <span>100%</span>
+            </div>
+
+            <div class="progress">
+                <div style="width:100%"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- BUG NO WA -->
+
+<section class="content">
+
+    <div class="section-title">
+        // BUG NO WA
+    </div>
+
+    <div class="bug-panel">
+
+        <div class="bug-header">
+
+            <div class="bug-title">
+                WHATSAPP BUG SIMULATOR
+            </div>
+
+            <div class="simulation">
+                SIMULATION ONLY
+            </div>
+
+        </div>
+
+        <p style="
+            font-size:11px;
+            opacity:.55;
+            line-height:1.7;
+            margin-bottom:18px;
+        ">
+            Masukkan nomor apa pun untuk menjalankan
+            simulasi. Tidak ada pesan atau koneksi
+            WhatsApp yang benar-benar dijalankan.
+        </p>
+
+        <input
+            id="waNumber"
+            class="bug-input"
+            type="text"
+            inputmode="tel"
+            placeholder="+62xxxxxxxxxx"
+            autocomplete="off"
+        >
+
+        <button
+            class="cyber-button"
+            onclick="runBugSimulation()"
+        >
+            RUN BUG
+        </button>
+
+        <button
+            class="cyber-button"
+            onclick="resetBug()"
+        >
+            RESET
+        </button>
+
+        <div
+            id="bugStatus"
+            class="bug-status"
+        >
+            > WAITING FOR INPUT...
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- TERMINAL -->
+
+<section
+    class="content"
+    id="terminal"
+>
+
+    <div class="section-title">
+        // DIGITAL TERMINAL
+    </div>
+
+    <div class="terminal">
+
+        <div class="terminal-line">
+            <span class="prompt">
+                root@cyber:~$
+            </span>
+            initializing system...
+        </div>
+
+        <div class="terminal-line">
+            [ OK ] Network interface
+        </div>
+
+        <div class="terminal-line">
+            [ OK ] Security module
+        </div>
+
+        <div class="terminal-line">
+            [ OK ] Database connection
+        </div>
+
+        <div class="terminal-line">
+            [ OK ] Cyber core
+        </div>
+
+        <div class="terminal-line">
+            [ OK ] Digital grid
+        </div>
+
+        <br>
+
+        <div class="terminal-line">
+            <span class="prompt">
+                root@cyber:~$
+            </span>
+            system ready
+            <span class="cursor"></span>
+        </div>
+
+    </div>
+
+    <div class="warning">
+        SYSTEM STATUS: ALL MODULES OPERATIONAL
+    </div>
+
+</section>
+
+
+<footer>
+
+    CYBER//CORE
+    <br><br>
+    DIGITAL SYSTEM INTERFACE • LOCAL ENVIRONMENT
+
+</footer>
+
+
+<script>
+
+/* =====================
+   MATRIX
+===================== */
+
+const canvas =
+    document.getElementById("matrix");
+
+const ctx =
+    canvas.getContext("2d");
+
+const characters =
+    "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&@<>";
+
+let fontSize = 14;
+
+let columns = 0;
+
+let drops = [];
+
+function resize(){
+
+    canvas.width =
+        window.innerWidth;
+
+    canvas.height =
+        window.innerHeight;
+
+    columns =
+        Math.max(
+            1,
+            Math.floor(
+                canvas.width / fontSize
+            )
+        );
+
+    drops =
+        new Array(columns).fill(1);
+}
+
+function matrix(){
+
+    ctx.fillStyle =
+        "rgba(0,0,0,0.06)";
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    ctx.fillStyle =
+        "#00ff66";
+
+    ctx.font =
+        fontSize + "px monospace";
+
+    for(
+        let i=0;
+        i<drops.length;
+        i++
+    ){
+
+        const char =
+            characters[
+                Math.floor(
+                    Math.random() *
+                    characters.length
+                )
+            ];
+
+        ctx.fillText(
+            char,
+            i * fontSize,
+            drops[i] * fontSize
+        );
+
+        if(
+            drops[i] * fontSize >
+            canvas.height &&
+            Math.random() > .975
+        ){
+
+            drops[i] = 0;
+        }
+
+        drops[i]++;
+    }
+}
+
+resize();
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+setInterval(
+    matrix,
+    50
+);
+
+
+/* =====================
+   DIGITAL CLOCK
+===================== */
+
+function updateTime(){
+
+    const now =
+        new Date();
+
+    const status =
+        document.getElementById(
+            "onlineStatus"
+        );
+
+    if(status){
+
+        status.textContent =
+            "SYSTEM ONLINE ● " +
+            now.toLocaleTimeString();
+
+    }
+}
+
+updateTime();
+
+setInterval(
+    updateTime,
+    1000
+);
+
+
+/* =====================
+   RANDOM GLITCH
+===================== */
+
+const logo =
+    document.querySelector(".logo");
+
+setInterval(
+    function(){
+
+        if(
+            Math.random() > .8
+        ){
+
+            logo.style.transform =
+                "translate(" +
+                (Math.random()*4-2) +
+                "px)";
+
+            setTimeout(
+                function(){
+
+                    logo.style.transform =
+                        "";
+
+                },
+                100
+            );
+        }
+
+    },
+    1200
+);
+
+
+/* =====================
+   BUG NO WA SIMULATOR
+===================== */
+
+function runBugSimulation(){
+
+    const input =
+        document.getElementById(
+            "waNumber"
+        );
+
+    const status =
+        document.getElementById(
+            "bugStatus"
+        );
+
+    const number =
+        input.value.trim();
+
+    if(!number){
+
+        status.className =
+            "bug-status error-text";
+
+        status.innerHTML =
+            "> ERROR: NOMOR BELUM DIISI";
+
+        return;
+    }
+
+
+    status.className =
+        "bug-status warning-text";
+
+    status.innerHTML =
+        "> INITIALIZING SIMULATION...<br>" +
+        "> TARGET: " +
+        escapeHTML(number) +
+        "<br>" +
+        "> ANALYZING VIRTUAL SYSTEM...";
+
+
+    setTimeout(
+        function(){
+
+            status.className =
+                "bug-status success-text";
+
+            status.innerHTML =
+                "> TARGET ACCEPTED<br>" +
+                "> SIMULATION ENGINE: ACTIVE<br>" +
+                "> VIRTUAL REQUEST: COMPLETE<br>" +
+                "> BUG STATUS: SUCCESS<br>" +
+                "> RESULT: SIMULATION ONLY<br>" +
+                "> NO REAL WHATSAPP ACTION PERFORMED";
+
+        },
+        1200
+    );
+}
+
+
+/* =====================
+   RESET
+===================== */
+
+function resetBug(){
+
+    const input =
+        document.getElementById(
+            "waNumber"
+        );
+
+    const status =
+        document.getElementById(
+            "bugStatus"
+        );
+
+    input.value = "";
+
+    status.className =
+        "bug-status";
+
+    status.innerHTML =
+        "> WAITING FOR INPUT...";
+
+    input.focus();
+}
+
+
+/* =====================
+   SAFE TEXT
+===================== */
+
+function escapeHTML(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+</script>
+
+</body>
+</html>
